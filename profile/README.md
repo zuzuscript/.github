@@ -6,67 +6,67 @@ The project is intentionally multi-runtime. zuzu-perl, zuzu-rust, and zuzu-js im
 
 The language itself has a fun mix of familiar and unusual features: typed function signatures, lambdas and closures, classes with generated accessors, rich collection literals, PairLists for duplicate ordered keys, path-query operators for nested data, first-class regexps, async tasks, web request handlers, and GUI widgets. It feels like a scripting language that enjoys being useful.
 
-```zzs
-  from std/task import all, sleep;
+```javascript
+from std/task import all, sleep;
 
-  class TrailStop {
-        let String name with get;
-        let Number sparkle with get := 0;
-  }
+class TrailStop {
+      let String name with get;
+      let Number sparkle with get := 0;
+}
 
-  function label_stop ( TrailStop stop ) -> String {
-        return `${stop.get_name()} (${stop.get_sparkle()} sparkle)`;
-  }
+function label_stop ( TrailStop stop ) → String {
+      return `${stop.get_name} (${stop.get_sparkle} sparkle)`;
+}
 
-  function pack_report ( String scout, ... PairList kit ) -> String {
-        return `${scout} packed ${kit.all("snack").length()} snacks and a ${kit{tool}}.`;
-  }
+function pack_report ( String scout, ... PairList kit ) → String {
+      return `${scout} packed ${kit.all("snack").length} snacks and a ${kit{tool}}.`;
+}
 
-  async function inspect_stop ( TrailStop stop ) {
-        await {
-                sleep(0.01);
-        };
+async function inspect_stop ( TrailStop stop ) {
+      await {
+              sleep(0.01);
+      };
 
-        return {
-                name: stop.get_name(),
-                sparkle: stop.get_sparkle(),
-        };
-  }
+      return {
+              name: stop.get_name,
+              sparkle: stop.get_sparkle,
+      };
+}
 
-  async function __main__ () {
-        let route := [
-                new TrailStop( name: "Moonlit Bridge", sparkle: 5 ),
-                new TrailStop( name: "Old Clocktower", sparkle: 2 ),
-                new TrailStop( name: "Secret Bakery", sparkle: 8 ),
-        ];
+async function __main__ ( argv ) {
+      let route := [
+              new TrailStop( name: "Moonlit Bridge", sparkle: 5 ),
+              new TrailStop( name: "Old Clocktower", sparkle: 2 ),
+              new TrailStop( name: "Secret Bakery", sparkle: 8 ),
+      ];
 
-        let favourites := route
-                .grep( fn stop -> stop.get_sparkle() >= 5 )
-                .map( fn stop -> label_stop(stop) );
+      let favourites := route
+              .grep( fn stop → stop.get_sparkle ≥ 5 )
+              .map( fn stop → label_stop(stop) );
 
-        let field_notes := {
-                scout: {
-                        name: "Zia",
-                        title: "raccoon field engineer",
-                },
-                route: favourites,
-        };
+      let field_notes := {
+              scout: {
+                      name: "Zia",
+                      title: "raccoon field engineer",
+              },
+              route: favourites,
+      };
 
-        say field_notes @ "/scout/name";
-        say field_notes @@ "/route/*";
+      say field_notes @ "/scout/name";
+      say field_notes @@ "/route/*";
 
-        say pack_report(
-                "Zia",
-                snack: "berries",
-                snack: "biscuits",
-                tool: "tiny map",
-        );
+      say pack_report(
+              "Zia",
+              snack: "berries",
+              snack: "biscuits",
+              tool: "tiny map",
+      );
 
-        let inspections := await {
-                all( route.map( fn stop -> inspect_stop(stop) ) );
-        };
+      let inspections := await {
+              all( route.map( fn stop → inspect_stop(stop) ) );
+      };
 
-        let total_sparkle := ( inspections @@ "/*/sparkle" ).sum();
-        say `Zia logged ${total_sparkle} sparkle before breakfast.`;
-  }
+      let total_sparkle := ( inspections @@ "/*/sparkle" ).sum;
+      say `Zia logged ${total_sparkle} sparkle before breakfast.`;
+}
 ```
